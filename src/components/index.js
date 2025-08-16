@@ -1,0 +1,9 @@
+export { default as Head } from './Head.jsx';
+export { default as Layout } from './Layout.jsx';
+export { default as Loader } from './Loader.jsx';
+export { default as Nav } from './Nav.jsx';
+export { default as Menu } from './Menu.jsx';
+export { default as Side } from './Side.jsx';
+export { default as Social } from './Social.jsx';
+export { default as Email } from './Email.jsx';
+export { default as Footer } from './Footer.jsx';

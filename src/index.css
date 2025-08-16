@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --green: #64ffda;
+  --light-slate: #a8b2d1;
+  --lightest-slate: #ccd6f6;
+  --dark-navy: #020c1b;
+  --navy: #0a192f;
+  --navy-shadow: rgba(2, 12, 27, 0.7);
+  --transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+  --border-radius: 4px;
+  --font-mono: 'Fira Code', monospace;
+  --fz-xs: 12px;
+  --fz-sm: 14px;
+  --fz-md: 16px;
+  --fz-lg: 18px;
+  --fz-xl: 20px;
+  --fz-xxl: 22px;
+  --fz-heading: 32px;
+  --hamburger-width: 30px;
+  --nav-height: 100px;
+  --nav-scroll-height: 70px;
+}
+
+body {
+  background-color: var(--navy);
+  color: var(--lightest-slate);
+  font-family: 'Inter', sans-serif;
+}
+
+a {
+  @apply text-green-400 hover:text-green-300;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  padding: 8px;
+  background: var(--green);
+  color: var(--navy);
+  font-family: var(--font-mono);
+  font-size: var(--fz-sm);
+  transition: top 0.3s ease;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}

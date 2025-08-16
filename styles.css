@@ -1,0 +1,209 @@
+/* ==========================
+   BASE / BODY
+========================== */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f9fafb;
+  color: #1f2937;
+  scroll-behavior: smooth; /* only once */
+  margin: 0;
+}
+
+/* ==========================
+   FADE-IN ANIMATIONS
+========================== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.48s ease, transform 0.48s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================
+   HEADER & CONTACT
+========================== */
+header {
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+header h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+}
+header a {
+  transition: all 0.2s ease;
+}
+header a:hover {
+  background-color: rgba(99,102,241,0.08);
+  color: #6366f1;
+}
+
+/* ==========================
+   CARD HOVER EFFECTS
+========================== */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(15,23,42,0.12);
+}
+
+/* ==========================
+   ACCENT / GRADIENT TEXT
+========================== */
+.accent {
+  background: linear-gradient(90deg,#06b6d4,#6366f1);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ==========================
+   SKILLS / CHIPS
+========================== */
+.chip {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
+  transition: background 0.15s ease, transform 0.15s ease;
+  cursor: default;
+}
+.chip:hover {
+  transform: translateY(-3px);
+  background: rgba(99,102,241,0.1);
+}
+
+/* ==========================
+   PDF FRAME
+========================== */
+.pdf-frame {
+  width: 100%;
+  height: 70vh;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  transition: opacity 0.3s ease;
+}
+
+/* ==========================
+   COLLAPSIBLE SECTIONS
+========================== */
+.collapsible {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+.expanded .collapsible {
+  max-height: 1200px; /* fallback, JS sets actual scrollHeight */
+  opacity: 1;
+}
+
+/* ==========================
+   TIMELINE DOTS
+========================== */
+.timeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg,#06b6d4,#6366f1);
+  box-shadow: 0 4px 10px rgba(99,102,241,0.2);
+}
+.timeline-line {
+  width: 2px;
+  background-color: #e5e7eb;
+  flex-grow: 1;
+}
+
+/* ==========================
+   PROJECT ICONS
+========================== */
+.project-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #fff;
+  flex-shrink: 0;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.project-icon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(99,102,241,0.2);
+}
+
+/* ==========================
+   TOGGLE BUTTONS
+========================== */
+.toggle-btn, .toggle-exp-btn {
+  cursor: pointer;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  background-color: #f9fafb;
+}
+.toggle-btn:hover, .toggle-exp-btn:hover {
+  background-color: rgba(99,102,241,0.05);
+}
+
+/* ==========================
+   FOOTER
+========================== */
+footer {
+  margin-top: 3rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+footer a {
+  transition: all 0.2s ease;
+}
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================
+   RESPONSIVE TWEAKS
+========================== */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .timeline-line {
+    height: 50px !important;
+  }
+
+  .grid.md\:grid-cols-2 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ==========================
+   CUSTOM BUTTON GRADIENTS
+========================== */
+.bg-gradient-teal-indigo {
+  background: linear-gradient(90deg, #06b6d4, #6366f1);
+  color: #fff;
+  transition: all 0.25s ease;
+}
+.bg-gradient-teal-indigo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(99,102,241,0.25);
+}
+
