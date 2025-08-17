@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prem Kumar — Interactive Resume</title>
+  <meta name="description" content="Interactive resume of Prem Kumar — Software Engineer (IIT Jodhpur). Clickable links, animated sections, and PDF fallback." />
+
+  <!-- Google Fonts (Inter + JetBrains Mono) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom Styles -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      color: #1e293b;
+    }
+
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Staggered Fade-In Animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(0.2, 0, 0.2, 1);
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+    .delay-5 { transition-delay: 0.5s; }
+
+    /* Card Hover Effect */
+    .card-hover {
+      transition: all 0.3s ease;
+      border: 1px solid rgba(156, 163, 175, 0.2);
+      border-radius: 12px;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 25px 35px -10px rgba(0, 0, 0, 0.15), 0 12px 12px -6px rgba(0, 0, 0, 0.08);
+      border-color: #818cf8;
+    }
+
+    /* Timeline Dot */
+    .timeline-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      margin-top: 4px;
+      box-shadow: 0 0 0 5px rgba(99, 102, 241, 0.1);
+    }
+
+    /* Collapsible Section */
+    .collapsible {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .expanded .collapsible {
+      max-height: 600px;
+    }
+
+    /* Button Ripple/Glow */
+    .btn-glow {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-glow::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      animation: ripple 0.6s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: translate(-50%, -50%) scale(10);
+        opacity: 0;
+      }
+    }
+
+    /* PDF Frame Styling */
+    .pdf-frame {
+      width: 100%;
+      height: 800px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    /* Accent Gradient */
+    .accent {
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Skill Chip */
+    .chip {
+      background: linear-gradient(90deg, #e0e7ff, #f3e8ff);
+      color: #4f46e5;
+      font-size: 0.875rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 0.5rem;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .chip:hover {
+      background: linear-gradient(90deg, #a5b4fc, #c084fc);
+      color: white;
+      transform: scale(1.05);
+    }
+
+    /* Header Glow */
+    .header-glow {
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Footer Gradient Line */
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, #d1d5db, transparent);
+      margin: 1.5rem 0;
+    }
+
+    /* Project Icon Enhancement */
+    .project-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+    }
+
+    /* Link Buttons */
+    .btn-link {
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-demo {
+      background: #10b981;
+      color: white;
+    }
+
+    .btn-demo:hover {
+      background: #0d9488;
+      transform: translateY(-1px);
+    }
+
+    .btn-github {
+      background: #374151;
+      color: white;
+    }
+
+    .btn-github:hover {
+      background: #1f2937;
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 antialiased">
+
+  <div class="max-w-4xl mx-auto p-6 pt-8">
+
+    <!-- Header with Gradient Title -->
+    <header class="flex flex-col md:flex-row items-start justify-between gap-6 mb-8">
+      <div>
+        <h1 class="text-4xl md:text-5xl font-extrabold header-glow">Prem Kumar</h1>
+        <p class="text-lg text-gray-600 mt-2">B.Tech — Artificial Intelligence & Data Science, IIT Jodhpur</p>
+        <p class="text-sm text-gray-500 mt-1">Jodhpur, Rajasthan, India • +91 9386225649</p>
+      </div>
+
+      <div class="text-right space-y-3 mt-4 md:mt-0">
+        <a class="inline-block px-5 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:shadow-md transition-all btn-glow" href="mailto:premkumar39411@gmail.com">
+          premkumar39411@gmail.com
+        </a>
+        <div class="flex flex-wrap justify-end gap-2 mt-2">
+          <a class="px-4 py-2 bg-white border rounded-lg text-sm font-medium hover:shadow hover:border-indigo-300 transition-all btn-glow" href="https://github.com/premkumaranubhav123" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="px-4 py-2 bg-white border rounded-lg text-sm font-medium hover:shadow hover:border-indigo-300 transition-all btn-glow" href="https://www.linkedin.com/in/prem-kumar007" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg text-sm font-medium hover:from-indigo-700 hover:to-purple-700 shadow-md transition-all btn-glow" href="/resume.pdf" target="_blank" rel="noreferrer">Download PDF</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Summary Section -->
+    <section class="bg-white p-8 rounded-xl shadow-lg mb-8 fade-in delay-1 card-hover">
+      <div class="flex flex-col lg:flex-row gap-6 items-start">
+        <div class="flex-1">
+          <p class="text-lg text-gray-700 leading-relaxed">
+            I build fast, accessible web apps and data-driven solutions with a focus on production-readiness and clear user experiences.
+            My work combines backend optimization, frontend engineering, and applied ML to deliver measurable impact.
+          </p>
+          <p class="mt-4 text-sm text-gray-500 italic">
+            🔹 Currently pursuing B.Tech at <strong>IIT Jodhpur</strong> | Seeking SWE & ML roles
+          </p>
+        </div>
+        <div class="flex flex-col gap-3 min-w-[180px]">
+          <a href="#projects" class="px-5 py-3 bg-gradient-to-r from-teal-500 to-blue-500 text-white rounded-lg text-center text-sm font-medium hover:shadow-lg transition-all btn-glow">
+            Jump to Projects
+          </a>
+          <a href="/resume.pdf" target="_blank" class="px-5 py-3 border border-gray-300 bg-white rounded-lg text-center text-sm font-medium hover:shadow-md transition-all btn-glow">
+            View PDF Version
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section class="bg-white p-8 rounded-xl shadow-lg mb-8 fade-in delay-2 card-hover">
+      <h3 class="text-2xl font-bold mb-4 accent">🎓 Education</h3>
+      <div class="space-y-5 text-gray-700">
+        <div>
+          <strong class="text-lg">Indian Institute of Technology Jodhpur</strong><br/>
+          <span class="text-sm text-gray-600">B.Tech in Artificial Intelligence & Data Science — Oct 2022 to May 2026 (ongoing)</span><br/>
+          <span class="text-sm font-semibold">GPA: 8.52 / 10</span>
+          <p class="text-sm text-gray-600 mt-1">Relevant Coursework: Data Structures, Algorithms, ML, OS, CN, AI, Probability & Statistics</p>
+        </div>
+        <div>
+          <strong>Kendriya Vidyalaya Mokamaghat</strong><br/>
+          <span class="text-sm text-gray-600">Class XII (CBSE): 92.4% — 2022 | Class X (CBSE): 91.6% — 2020</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section id="experience" class="mb-8 fade-in delay-3">
+      <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+        <h2 class="text-3xl font-bold">💼 Experience</h2>
+        <p class="text-sm text-gray-500 mt-2 md:mt-0">Internships & measurable outcomes</p>
+      </div>
+
+      <article class="bg-white p-6 rounded-xl shadow-lg card-hover relative">
+        <div class="flex items-start gap-5">
+          <div class="flex flex-col items-center mt-1">
+            <div class="timeline-dot"></div>
+            <div class="w-px h-full bg-gradient-to-b from-indigo-200 to-purple-200"></div>
+          </div>
+          <div class="flex-1">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-3">
+              <div>
+                <h4 class="font-bold text-lg">Software Engineering Intern — Citadel</h4>
+                <p class="text-sm text-gray-600">May 2025 – Jun 2025 • Remote, India</p>
+              </div>
+              <button class="px-4 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-md text-sm font-medium toggle-exp-btn btn-glow" data-target="exp1">Expand ▾</button>
+            </div>
+            <div class="mt-4 text-sm text-gray-700 collapsible">
+              <ul class="list-disc pl-5 space-y-2">
+                <li><strong>High-frequency trading simulator:</strong> Engineered a Python simulator benchmarking ~100,000 trades/sec with latency under 5ms.</li>
+                <li><strong>Data pipeline optimization:</strong> Led a 4-member team to rework ingestion flows using Kafka and Redis, reducing data lag by 35%.</li>
+                <li><strong>CI/CD & containerization:</strong> Implemented GitHub Actions and Docker, increasing release reliability by 40%.</li>
+                <li><strong>Performance tuning:</strong> Conducted profiling and low-level optimizations to improve throughput.</li>
+              </ul>
+              <div class="mt-3 text-xs text-gray-500 font-mono bg-gray-50 p-2 rounded">Tech: Python, Docker, Kafka, Redis, CI/CD</div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="mb-8 fade-in delay-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+        <h2 class="text-3xl font-bold">🚀 Selected Projects</h2>
+        <p class="text-sm text-gray-500 mt-2 md:mt-0">Live demos and code available</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Project 1 -->
+        <article class="bg-white p-5 rounded-xl shadow-lg card-hover" data-id="p1">
+          <div class="flex items-start gap-4">
+            <div class="project-icon bg-gradient-to-tr from-teal-400 to-indigo-500">AG</div>
+            <div class="flex-1">
+              <h4 class="font-bold text-gray-800">Automated Grading Tool</h4>
+              <p class="text-sm text-indigo-600 font-medium">Python • Tkinter • Pandas</p>
+              <p class="mt-2 text-sm text-gray-700">GUI app for educators to automate grading with Excel support and visual analytics.</p>
+              <div class="mt-3 text-sm collapsible">
+                <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                  <li>Reduced manual grading time by 50% for 150+ students.</li>
+                  <li>Integrated Excel import/export and histogram visualization.</li>
+                  <li>Modular logic and 85% unit test coverage.</li>
+                </ul>
+                <div class="mt-2 text-xs text-gray-500 font-mono bg-gray-50 p-1.5 rounded">Python, Tkinter, Pandas, Matplotlib</div>
+                <div class="mt-3 flex gap-2">
+                  <a href="https://smart-grading-app-for-grading.streamlit.app/" target="_blank" class="btn-link btn-demo btn-glow">Live Demo</a>
+                  <a href="https://github.com/premkumaranubhav123/Automated-Grading-Tool" target="_blank" class="btn-link btn-github btn-glow">GitHub</a>
+                </div>
+              </div>
+            </div>
+            <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium toggle-btn btn-glow" data-target="p1">Details ▾</button>
+          </div>
+        </article>
+
+        <!-- Project 2 -->
+        <article class="bg-white p-5 rounded-xl shadow-lg card-hover" data-id="p2">
+          <div class="flex items-start gap-4">
+            <div class="project-icon bg-gradient-to-tr from-blue-400 to-purple-500">PA</div>
+            <div class="flex-1">
+              <h4 class="font-bold text-gray-800">Packet Analyzer Dashboard</h4>
+              <p class="text-sm text-indigo-600 font-medium">Python • Dash • Networking</p>
+              <p class="mt-2 text-sm text-gray-700">Visualized 500+ packets/sec with 92% anomaly detection accuracy.</p>
+              <div class="mt-3 text-sm collapsible">
+                <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                  <li>Built with Dash for real-time network traffic monitoring.</li>
+                  <li>Reduced false positives by 20% using heuristic filters.</li>
+                  <li>Improved throughput by 25% via concurrency optimization.</li>
+                </ul>
+                <div class="mt-2 text-xs text-gray-500 font-mono bg-gray-50 p-1.5 rounded">Python, Dash, Networking, Concurrency</div>
+                <div class="mt-3 flex gap-2">
+                  <a href="https://github.com/premkumaranubhav123/network-packet-hosting" target="_blank" class="btn-link btn-github btn-glow">GitHub</a>
+                </div>
+              </div>
+            </div>
+            <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium toggle-btn btn-glow" data-target="p2">Details ▾</button>
+          </div>
+        </article>
+
+        <!-- Project 3 -->
+        <article class="bg-white p-5 rounded-xl shadow-lg card-hover" data-id="p3">
+          <div class="flex items-start gap-4">
+            <div class="project-icon bg-gradient-to-tr from-green-400 to-blue-500">LT</div>
+            <div class="flex-1">
+              <h4 class="font-bold text-gray-800">Language Learning Chat Bot</h4>
+              <p class="text-sm text-indigo-600 font-medium">NLP • Flask • Seq2Seq</p>
+              <p class="mt-2 text-sm text-gray-700">Real-time translator with 85% BLEU score and 200ms latency.</p>
+              <div class="mt-3 text-sm collapsible">
+                <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                  <li>Built NLP chatbot using RNN and seq2seq models in TensorFlow.</li>
+                  <li>Flask backend handling 500+ queries/day.</li>
+                  <li>Improved user engagement by 40% with responsive frontend.</li>
+                </ul>
+                <div class="mt-2 text-xs text-gray-500 font-mono bg-gray-50 p-1.5 rounded">Python, TensorFlow, Flask, NLP</div>
+                <div class="mt-3 flex gap-2">
+                  <a href="https://language-learning-bot-updated.onrender.com/" target="_blank" class="btn-link btn-demo btn-glow">Live Demo</a>
+                  <a href="https://github.com/premkumaranubhav123/language-learning-bot" target="_blank" class="btn-link btn-github btn-glow">GitHub</a>
+                </div>
+              </div>
+            </div>
+            <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium toggle-btn btn-glow" data-target="p3">Details ▾</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="bg-white p-8 rounded-xl shadow-lg mb-8 fade-in delay-5">
+      <h3 class="text-2xl font-bold mb-5 accent">🛠️ Technical Skills</h3>
+      <div class="space-y-4">
+        <div>
+          <strong class="text-gray-700">Languages:</strong>
+          <div class="flex flex-wrap gap-2 mt-2">
+            <span class="chip">Python</span>
+            <span class="chip">C++</span>
+            <span class="chip">Java</span>
+            <span class="chip">SQL</span>
+            <span class="chip">JavaScript</span>
+          </div>
+        </div>
+        <div>
+          <strong class="text-gray-700">Web & Frameworks:</strong>
+          <div class="flex flex-wrap gap-2 mt-2">
+            <span class="chip">React</span>
+            <span class="chip">Node.js</span>
+            <span class="chip">Flask</span>
+            <span class="chip">Dash</span>
+            <span class="chip">HTML/CSS</span>
+          </div>
+        </div>
+        <div>
+          <strong class="text-gray-700">AI & Data:</strong>
+          <div class="flex flex-wrap gap-2 mt-2">
+            <span class="chip">TensorFlow</span>
+            <span class="chip">Scikit-learn</span>
+            <span class="chip">Pandas</span>
+            <span class="chip">NLP</span>
+            <span class="chip">ML</span>
+          </div>
+        </div>
+        <div>
+          <strong class="text-gray-700">Tools & DevOps:</strong>
+          <div class="flex flex-wrap gap-2 mt-2">
+            <span class="chip">Docker</span>
+            <span class="chip">Kafka</span>
+            <span class="chip">Redis</span>
+            <span class="chip">Git</span>
+            <span class="chip">CI/CD</span>
+            <span class="chip">Linux</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certificates -->
+    <section class="bg-white p-8 rounded-xl shadow-lg mb-8 fade-in delay-4">
+      <h3 class="text-2xl font-bold mb-5 accent">📜 Certifications</h3>
+      <div class="space-y-4 text-gray-700">
+        <div class="border-l-4 border-indigo-200 pl-4">
+          <strong>Machine Learning — Coursera</strong>
+          <p class="text-sm text-gray-600">Supervised & Unsupervised Learning, Neural Networks</p>
+        </div>
+        <div class="border-l-4 border-purple-200 pl-4">
+          <strong>Foundations of Cybersecurity — Coursera</strong>
+          <p class="text-sm text-gray-600">Network Security, Cryptography, Risk Management</p>
+        </div>
+        <div class="border-l-4 border-teal-200 pl-4">
+          <strong>Front-End Development — Coursera</strong>
+          <p class="text-sm text-gray-600">HTML, CSS, JavaScript, Responsive Design</p>
+        </div>
+        <div class="border-l-4 border-orange-200 pl-4">
+          <strong>Programming for Everybody — Coursera</strong>
+          <p class="text-sm text-gray-600">Python, Problem Solving, Basics</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer & PDF Viewer -->
+    <footer class="text-sm text-gray-600 fade-in delay-5">
+      <div class="divider"></div>
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>© <span id="year"></span> Prem Kumar • <a href="https://my-portfolio-nine-rho-89.vercel.app/" target="_blank" rel="noreferrer" class="hover:underline font-medium">View Portfolio</a></div>
+        <div class="flex items-center gap-3">
+          <a class="px-4 py-2 border rounded-lg hover:shadow-md transition-all btn-glow" href="/resume.pdf" target="_blank">Open PDF</a>
+          <button id="togglePDF" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all btn-glow">Toggle PDF Viewer</button>
+        </div>
+      </div>
+
+      <div id="pdfContainer" class="mt-6 hidden">
+        <iframe class="pdf-frame" id="pdfFrame" src="/resume.pdf"></iframe>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Set current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Fade-in observer with stagger
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          setTimeout(() => {
+            entry.target.classList.add('delay-' + ((index % 5) + 1));
+          }, (index % 10) * 100);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Toggle project details
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-target');
+        const article = document.querySelector(`[data-id="${id}"]`);
+        if (!article) return;
+        article.classList.toggle('expanded');
+        const coll = article.querySelector('.collapsible');
+        coll.style.maxHeight = article.classList.contains('expanded') ? coll.scrollHeight + 'px' : '0';
+        btn.textContent = article.classList.contains('expanded') ? 'Details ▴' : 'Details ▾';
+        article.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+
+    // Toggle experience details
+    document.querySelectorAll('.toggle-exp-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-target');
+        const article = document.querySelector('#experience article');
+        if (!article) return;
+        article.classList.toggle('expanded');
+        const coll = article.querySelector('.collapsible');
+        coll.style.maxHeight = article.classList.contains('expanded') ? coll.scrollHeight + 'px' : '0';
+        btn.textContent = article.classList.contains('expanded') ? 'Collapse ▴' : 'Expand ▾';
+      });
+    });
+
+    // Initialize collapsible sections
+    document.querySelectorAll('.collapsible').forEach(c => c.style.maxHeight = '0');
+
+    // Toggle PDF viewer
+    const pdfToggle = document.getElementById('togglePDF');
+    const pdfContainer = document.getElementById('pdfContainer');
+    pdfToggle.addEventListener('click', () => {
+      pdfContainer.classList.toggle('hidden');
+      pdfToggle.textContent = pdfContainer.classList.contains('hidden') ? 'Toggle PDF Viewer' : 'Hide PDF Viewer';
+    });
+  </script>
+</body>
+</html>
