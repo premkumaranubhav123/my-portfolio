@@ -75,7 +75,6 @@ export const siteData = {
       description: 'Built a real-time stock price visualization tool using Python, Dash, and yfinance. Skills: Data fetching, API integration, interactive UI development.',
       tech: ['Python', 'data visualization, and cloud deployment.'],
       repo: 'https://github.com/premkumaranubhav123/stock-tracker  ',
-      live: 'https://quiz-maker-growth-link.netlify.app/  ',
       img: '/project/project4.png',
     },
     {
